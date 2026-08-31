@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "baritone-scheduler",
-  "version": "${version}",
+  "version": "1.0.0",
   "name": "Baritone Scheduler",
   "description": "Menjalankan jadwal mining Baritone otomatis (interval + auto-stop) via config JSON.",
   "authors": ["you"],
