@@ -6,20 +6,23 @@
       "command": "mine",
       "intervalMinutes": 5,
       "durationSeconds": 60,
-      "enabled": true
+      "enabled": true,
+      "afterCommands": ["#back", "say Selesai mining diamond!"]
     },
     {
       "target": "iron_ore coal_ore",
       "command": "mine",
       "intervalMinutes": 10,
       "durationSeconds": 120,
-      "enabled": true
+      "enabled": true,
+      "afterCommands": []
     }
   ],
   "stopRule": {
     "mode": "AFTER_MINUTES",
     "afterMinutes": 120,
-    "atClock": "23:30"
+    "atClock": "23:30",
+    "afterCommands": ["#back", "/home base"]
   },
   "verboseChatLog": true
 }
