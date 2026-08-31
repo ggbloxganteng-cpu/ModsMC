@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "baritone-scheduler",
+  "version": "${version}",
+  "name": "Baritone Scheduler",
+  "description": "Menjalankan jadwal mining Baritone otomatis (interval + auto-stop) via config JSON.",
+  "authors": ["you"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/baritone-scheduler/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.example.baritonescheduler.BaritoneSchedulerMod"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.6",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "custom": {
+    "baritone_scheduler:note": "Mod ini TIDAK menyertakan Baritone. Pastikan Baritone (client-side Fabric build) terpasang terpisah, sesuai versi Minecraft yang sama."
+  }
+}
