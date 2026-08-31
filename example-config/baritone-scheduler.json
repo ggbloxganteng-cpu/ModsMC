@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "tasks": [
+    {
+      "target": "diamond_ore",
+      "command": "mine",
+      "intervalMinutes": 5,
+      "durationSeconds": 60,
+      "enabled": true
+    },
+    {
+      "target": "iron_ore coal_ore",
+      "command": "mine",
+      "intervalMinutes": 10,
+      "durationSeconds": 120,
+      "enabled": true
+    }
+  ],
+  "stopRule": {
+    "mode": "AFTER_MINUTES",
+    "afterMinutes": 120,
+    "atClock": "23:30"
+  },
+  "verboseChatLog": true
+}
