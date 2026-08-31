@@ -12,7 +12,7 @@ jobs:
       - name: Setup Gradle Wrapper
         run: |
           if [ ! -f "./gradlew" ]; then
-            gradle wrapper --gradle-version 8.10
+            gradle wrapper --gradle-version 8.13
           fi
           chmod +x gradlew
       - run: ./gradlew build --stacktrace
