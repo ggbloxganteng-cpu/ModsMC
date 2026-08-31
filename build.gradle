@@ -24,13 +24,6 @@ dependencies {
     // Kalau mau compile-time reference ke API Baritone, tambahkan modCompileOnly dan repo maven Baritone-nya sendiri.
 }
 
-processResources {
-    inputs.property "version", project.version
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
-
 java {
     withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_21

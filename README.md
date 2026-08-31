@@ -19,7 +19,7 @@ versi yang cocok dengan Minecraft 1.21.6.
    rilis Fabric untuk versi Minecraft baru sering di-update.
 3. Jalankan:
    ```
-   gradle wrapper --gradle-version 8.10
+   gradle wrapper --gradle-version 8.13
    ./gradlew build
    ```
 4. Hasil jar ada di `build/libs/baritone-scheduler-1.0.0.jar`.
@@ -47,9 +47,34 @@ Contoh isinya ada di `example-config/baritone-scheduler.json` pada project ini. 
 
 ## Command in-game
 - `/bscheduler start` — mulai scheduler (baca config saat itu).
-- `/bscheduler stop` — hentikan scheduler + kirim `#stop` ke Baritone.
+- `/bscheduler stop` — hentikan scheduler + kirim `#stop` ke Baritone + jalankan `stopRule.afterCommands`.
 - `/bscheduler reload` — muat ulang config dari file tanpa restart game.
 - `/bscheduler status` — tampilkan status & daftar task aktif.
+- `/bscheduler gui` — **buka layar setting** (tambah/edit/hapus task, atur global settings, langsung tersimpan ke file). Ini cara paling gampang kalau kamu main di HP dan gak enak edit JSON manual.
+
+## Command tambahan setelah mining selesai (afterCommands)
+Tiap task dan stopRule sekarang punya field `afterCommands` — daftar command yang dijalankan
+BERURUTAN begitu event-nya kejadian, bukan cuma diam:
+
+- `task.afterCommands` → jalan begitu `durationSeconds` task itu habis. Contoh: `["#back", "say Selesai!"]`
+  supaya karakter otomatis balik ke titik awal (fitur bawaan Baritone `#back`) lalu kirim chat.
+- `stopRule.afterCommands` → jalan begitu SELURUH scheduler berhenti (baik manual `/bscheduler stop`
+  maupun otomatis kena `stopRule`). Contoh: `["#back", "/home base", "/logout"]`.
+
+Aturan penulisan tiap command dalam list:
+- Diawali `#` → dikirim sebagai command Baritone (`#back`, `#stop`, dll).
+- Diawali `/` → command normal Minecraft/server (`/home base`, `/tpa spawn`, `/sell all` — tergantung
+  plugin server-nya, sama seperti kalau kamu ketik manual).
+- Tanpa awalan → dikirim sebagai chat biasa.
+
+Di GUI (`/bscheduler gui`), isi field "command sesudahnya" dipisah pakai `|`, contoh:
+`#back | /home base | say selesai`.
+
+## Catatan versi mod
+Field `"version"` di `src/main/resources/fabric.mod.json` sekarang di-hardcode (tidak pakai
+placeholder `${version}` lagi, karena templating Gradle-nya sempat gagal dan bikin Fabric Loader
+error "Incompatible mods found"). Kalau nanti mau naikkan versi mod, update MANUAL di dua tempat:
+`gradle.properties` (`mod_version`) DAN `fabric.mod.json` (`"version"`), harus sama persis.
 
 ## Catatan penting
 - Ini SEPENUHNYA client-side dan otomatisasi seperti ini biasanya melanggar aturan server survival
