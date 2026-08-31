@@ -44,6 +44,12 @@ public class BaritoneSchedulerMod implements ClientModInitializer {
                                 reportStatus(ctx.getSource());
                                 return 1;
                             }))
+                    .then(ClientCommandManager.literal("gui")
+                            .executes(ctx -> {
+                                net.minecraft.client.MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
+                                client.setScreen(new com.example.baritonescheduler.gui.TaskListScreen(manager));
+                                return 1;
+                            }))
             );
         });
     }

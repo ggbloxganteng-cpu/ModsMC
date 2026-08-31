@@ -21,6 +21,16 @@ public class ScheduleEntry {
     /** Aktif/nonaktif entri ini tanpa perlu menghapusnya dari config */
     public boolean enabled = true;
 
+    /**
+     * Command yang dijalankan URUT setelah durasi mining ini habis (bukan cuma diam).
+     * Bisa campur:
+     *  - diawali '#' -> dikirim sebagai command Baritone, contoh "#back", "#stop"
+     *  - diawali '/' -> command normal Minecraft/server, contoh "/home base", "/sell all", "/tpa spawn"
+     *  - tanpa awalan -> dikirim sebagai chat biasa, contoh "Selesai mining!"
+     * Kosongkan array ini kalau memang mau diam saja setelah selesai (default lama).
+     */
+    public java.util.List<String> afterCommands = new java.util.ArrayList<>();
+
     @Override
     public String toString() {
         return "ScheduleEntry{target=" + target + ", command=" + command +

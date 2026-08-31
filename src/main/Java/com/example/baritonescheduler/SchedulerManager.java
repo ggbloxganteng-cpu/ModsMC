@@ -41,6 +41,12 @@ public class SchedulerManager {
         log("Config di-reload: " + config.tasks.size() + " task ditemukan.");
     }
 
+    /** Simpan config saat ini (termasuk hasil edit dari GUI) ke file JSON */
+    public void saveToDisk() {
+        SchedulerConfig.save(config, configPath);
+        log("Config disimpan ke " + configPath);
+    }
+
     public void start() {
         if (!config.enabled) {
             log("Scheduler nonaktif di config (\"enabled\": false). Ubah config lalu /bscheduler reload.");
@@ -56,6 +62,7 @@ public class SchedulerManager {
     public void stop() {
         running = false;
         sendBaritoneCommand("stop");
+        sendCommandList(config.stopRule != null ? config.stopRule.afterCommands : null, "setelah scheduler berhenti");
         log("Scheduler dihentikan.");
     }
 
@@ -103,6 +110,7 @@ public class SchedulerManager {
         if (stopTick != null && tickCounter >= stopTick) {
             sendBaritoneCommand("stop");
             log("Task selesai (durasi habis): " + task.target);
+            sendCommandList(task.afterCommands, "setelah task '" + task.target + "'");
             stopAtTick.remove(task);
         }
     }
@@ -139,11 +147,34 @@ public class SchedulerManager {
         }
     }
 
-    private void sendBaritoneCommand(String withoutHash) {
+    /** Kirim satu baris "command" sesuai awalannya:
+     *  '#...' -> command Baritone (dikirim sebagai chat, Baritone yang intercept)
+     *  '/...' -> command normal Minecraft/server (pakai jalur command asli, sama seperti ngetik manual)
+     *   lainnya -> chat biasa
+     */
+    private void sendLine(String line) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.player == null) return;
-        // Baritone meng-intercept pesan chat yang diawali '#' sebelum benar-benar terkirim ke server
-        client.player.networkHandler.sendChatMessage("#" + withoutHash);
+        if (client == null || client.player == null || line == null || line.isBlank()) return;
+        String trimmed = line.trim();
+        if (trimmed.startsWith("/")) {
+            client.player.networkHandler.sendChatCommand(trimmed.substring(1));
+        } else {
+            // baik "#mine ..." (Baritone) maupun chat biasa sama-sama lewat sendChatMessage
+            client.player.networkHandler.sendChatMessage(trimmed);
+        }
+    }
+
+    /** Jalankan sekumpulan command berurutan (dipakai untuk afterCommands) */
+    private void sendCommandList(java.util.List<String> commands, String context) {
+        if (commands == null || commands.isEmpty()) return;
+        for (String cmd : commands) {
+            sendLine(cmd);
+        }
+        log("Menjalankan " + commands.size() + " command tambahan (" + context + ").");
+    }
+
+    private void sendBaritoneCommand(String withoutHash) {
+        sendLine("#" + withoutHash);
     }
 
     private void log(String msg) {

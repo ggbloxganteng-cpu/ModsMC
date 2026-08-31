@@ -13,4 +13,11 @@ public class StopRule {
 
     /** Dipakai jika mode = AT_CLOCK, format 24 jam "HH:mm", contoh "23:30" */
     public String atClock = "23:30";
+
+    /**
+     * Command yang dijalankan URUT ketika scheduler berhenti total (auto-stop tercapai).
+     * Sama aturannya dengan ScheduleEntry.afterCommands ('#' = Baritone, '/' = command biasa, tanpa awalan = chat).
+     * Contoh: ["#back", "/logout"] biar otomatis kembali lalu keluar server setelah 2 jam.
+     */
+    public java.util.List<String> afterCommands = new java.util.ArrayList<>();
 }
